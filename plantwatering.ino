@@ -4,7 +4,6 @@
 #include <BlynkSimpleEsp8266.h>
 #include <DHT.h>
 #include <DallasTemperature.h>
-#include <ThingSpeak.h>
 #define ONE_WIRE_BUS D2
 
 OneWire oneWire(ONE_WIRE_BUS);
@@ -13,10 +12,6 @@ DallasTemperature sensors(&oneWire);
 char auth[] = "CxY6hfhjH0vozkUXn0ViifjCMeeekBap";
 char ssid[] = "Terrace home";
 char pass[] = "manorama21";
-
-WiFiClient client;
-long myChannelNumber = 1703956;
-const char myWriteAPIKey[] = "KYQB984ZLTY7MQPG";
 
 int LED = D3;
 
@@ -46,7 +41,6 @@ void setup()
   pinMode(LED, OUTPUT);
   Blynk.begin(auth, ssid, pass, "blynk.cloud", 80);
   sensors.begin();  
-  ThingSpeak.begin(client);
 }
 
 int sensor=0;
@@ -71,9 +65,6 @@ void loop()
   Blynk.run();
   timer.run();
   sendTemps();
-  ThingSpeak.writeField(myChannelNumber, 1, 'Moisture', myWriteAPIKey);
-  ThingSpeak.writeField(myChannelNumber, 2, 'Temperature', myWriteAPIKey);
-  ThingSpeak.writeField(myChannelNumber, 3, 'Humidity', myWriteAPIKey);
 }
 BLYNK_WRITE(V7) {
   int pinValue = param.asInt(); // Assigning incoming value from pin V7 to a variable
